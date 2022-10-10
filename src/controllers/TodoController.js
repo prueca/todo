@@ -114,4 +114,31 @@ export default class TodoController {
       res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
   }
+
+  /**
+   * Get todo items based on page and limit
+   *
+   * @param {Request} req 
+   * @param {Response} res 
+   * 
+   * @returns void
+   */
+  async paginate(req, res) {
+    try {
+      const { page, limit } = req.query
+
+      if (!page || !limit) {
+        return res.error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
+      }
+
+      const { count, rows } = await this.todo.findAndCountAll({
+        offset: Number((page - 1) * limit),
+        limit: Number(limit),
+      })
+
+      res.data({ todos: rows, count })
+    } catch(error) {
+      res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
+    }
+  }
 }
