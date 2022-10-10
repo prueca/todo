@@ -6,8 +6,10 @@ import {
   PASS,
   OPTIONS,
 } from '../configs/db'
-import { todo as todoSchema } from '../models/definition'
+import schema from '../models/definition'
 import Todo from './Todo'
+
+const { todo: todoSchema } = schema
 
 export const sequelize = CONNECT ? new Sequelize(
   DATABASE,

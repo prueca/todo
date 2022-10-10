@@ -8,7 +8,10 @@ RESTful API for Todo App
 
 ### Setup
 
+> Note: Restart todo-api container after running as the database takes time to setup
+
 ```bash
 $ cp .env.example .env
 $ docker compose up --build -d
+$ docker restart todo-api
 ```

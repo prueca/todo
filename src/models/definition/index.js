@@ -1,3 +1,5 @@
-export default {
+import todo from './todo.schema'
 
+export default {
+  todo
 }
