@@ -15,3 +15,11 @@ $ cp .env.example .env
 $ docker compose up --build -d
 $ docker restart todo-api
 ```
+
+### Endpoints
+
+* Create: POST /api/todo
+* Read: GET /api/todo/:id
+* Update: PUT /api/todo/:id
+* Delete: DELETE /api/todo/:id
+* Read All: GET /api/todo
