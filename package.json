@@ -10,7 +10,8 @@
     "build": "rm -rf ./dist && babel ./src -d ./dist --copy-files",
     "start": "npm run build && cp .env.example .env && node ./dist/server.js",
     "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
+    "lint:fix": "eslint ./src --fix",
+    "test": "jest ./tests"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
@@ -26,15 +27,18 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.8",
+    "@babel/core": "^7.19.3",
     "@babel/eslint-parser": "^7.17.0",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-transform-runtime": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-env": "^7.19.4",
     "@babel/register": "^7.17.7",
     "@babel/runtime": "^7.17.8",
+    "@jest-mock/express": "^2.0.1",
+    "babel-jest": "^29.1.2",
     "babel-loader": "^8.2.4",
     "css-loader": "^6.7.1",
-    "eslint": "^8.11.0"
+    "eslint": "^8.11.0",
+    "jest": "^29.1.2"
   }
 }

@@ -20,11 +20,14 @@ export default class TodoController {
   async addTodo(req, res) {
     try {
       const { todo: newTodo } =  req.body
+
+      if (!newTodo) return res.error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
+
       const todo = await this.todo.create({ todo: newTodo })
 
-      res.data({ todo })
+      return res.data({ todo })
     } catch(error) {
-      res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
+      return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -39,9 +42,9 @@ export default class TodoController {
   async getAll(_req, res) {
     try {
       const todos = await this.todo.findAll()
-      res.data({ todos })
+      return res.data({ todos })
     } catch(error) {
-      res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
+      return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -60,9 +63,9 @@ export default class TodoController {
 
       if (!todo) return res.error(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
       
-      res.data({ todo })
+      return res.data({ todo })
     } catch(error) {
-      res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
+      return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -87,9 +90,9 @@ export default class TodoController {
       item.done = done
       await item.save()
 
-      res.data({ todo: item })
+      return res.data({ todo: item })
     } catch (error) {
-      res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
+      return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -109,9 +112,9 @@ export default class TodoController {
       if (!item) return res.error(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
       
       await item.destroy()
-      res.data({ success: true })
+      return res.data({ success: true })
     } catch(error) {
-      res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
+      return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -136,9 +139,9 @@ export default class TodoController {
         limit: Number(limit),
       })
 
-      res.data({ todos: rows, count })
+      return res.data({ todos: rows, count })
     } catch(error) {
-      res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
+      return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
   }
 }
