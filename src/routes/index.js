@@ -1,11 +1,12 @@
 import { Router } from 'express'
 import TodoController from '../controllers/TodoController'
 import response from '../middlewares/response'
+import auth from '../middlewares/auth'
 
 const router = Router()
 const controller = new TodoController()
 
-router.use('/api', response)
+router.use('/api', response, auth)
 router.get('/api/todo/page', controller.paginate.bind(controller))
 router.get('/api/todo', controller.getAll.bind(controller))
 router.get('/api/todo/:id', controller.getItem.bind(controller))
