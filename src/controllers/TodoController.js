@@ -1,5 +1,7 @@
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import models from '../models'
+import decode from '../utils/decode'
+import encode from '../utils/encode'
 
 export default class TodoController {
   /**
@@ -25,7 +27,12 @@ export default class TodoController {
 
       const todo = await this.todo.create({ todo: newTodo })
 
-      return res.data({ todo })
+      return res.data({
+        todo: {
+          ...todo.toJSON(),
+          todoId: encode(todo.todoId)
+        }
+      })
     } catch(error) {
       return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
@@ -42,6 +49,15 @@ export default class TodoController {
   async getAll(_req, res) {
     try {
       const todos = await this.todo.findAll()
+        .then(result => {
+          const transformed = result.map(item => ({
+            ...item.toJSON(),
+            todoId: encode(item.todoId)
+          }))
+
+          return transformed
+        })
+
       return res.data({ todos })
     } catch(error) {
       return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
@@ -59,11 +75,17 @@ export default class TodoController {
   async getItem(req, res) {
     try {
       const { id } = req.params
-      const todo = await this.todo.findByPk(id)
+      const decoded = decode(id)
+      const todo = await this.todo.findByPk(decoded)
 
       if (!todo) return res.error(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
       
-      return res.data({ todo })
+      return res.data({
+        todo: {
+          ...todo.toJSON(),
+          todoId: encode(todo.todoId)
+        }
+      })
     } catch(error) {
       return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
@@ -80,7 +102,8 @@ export default class TodoController {
   async updateTodo(req, res) {
     try {
       const { id } = req.params
-      const item = await this.todo.findByPk(id)
+      const decoded = decode(id)
+      const item = await this.todo.findByPk(decoded)
 
       if (!item) return res.error(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
 
@@ -90,7 +113,12 @@ export default class TodoController {
       item.done = done
       await item.save()
 
-      return res.data({ todo: item })
+      return res.data({
+        todo: {
+          ...item.toJSON(),
+          todoId: encode(item.todoId)
+        }
+      })
     } catch (error) {
       return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
@@ -107,7 +135,8 @@ export default class TodoController {
   async removeTodo(req, res) {
     try {
       const { id } = req.params
-      const item = await this.todo.findByPk(id)
+      const decoded = decode(id)
+      const item = await this.todo.findByPk(decoded)
       
       if (!item) return res.error(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
       
@@ -139,7 +168,15 @@ export default class TodoController {
         limit: Number(limit),
       })
 
-      return res.data({ todos: rows, count })
+      const transformed = rows.map(item => ({
+        ...item.toJSON(),
+        todoId: encode(item.todoId)
+      }))
+
+      return res.data({
+        todos: transformed,
+        count
+      })
     } catch(error) {
       return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }

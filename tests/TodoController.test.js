@@ -1,12 +1,14 @@
 import 'dotenv/config'
 import { getMockReq, getMockRes } from '@jest-mock/express'
+import { sequelize } from '../src/models'
 import TodoController from '../src/controllers/TodoController'
+import encode from '../src/utils/encode'
 
 const controller = new TodoController()
 let req = null, res = null
 
 describe('Todo API', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     ({ res } = getMockRes())
 
     res.data = jest.fn(data => ({
@@ -20,6 +22,8 @@ describe('Todo API', () => {
     }))
   })
 
+  afterAll(() => sequelize.close())
+
   test('CREATE - POST /api/todo', async () => {
     const todo = 'test'
     req = getMockReq({ body: { todo } })
@@ -32,7 +36,7 @@ describe('Todo API', () => {
   })
   
   test('READ - GET /api/todo/:id', async () => {
-    const id = 1
+    const id = encode(10)
     req = getMockReq({ params: { id } })
     const result = await controller.getItem(req, res)
 
@@ -43,7 +47,6 @@ describe('Todo API', () => {
   })
 
   test('READ ALL - GET /api/todo', async () => {
-    const id = 1
     req = getMockReq()
     const result = await controller.getAll(req, res)
 
@@ -54,7 +57,7 @@ describe('Todo API', () => {
 
   test('UPDATE - PUT /api/todo/:id', async () => {
     const replacement = {
-      todoId: 1,
+      todoId: encode(10),
       todo: 'Successfully updated',
       done: true
     }
@@ -70,11 +73,11 @@ describe('Todo API', () => {
     const result = await controller.updateTodo(req, res)
 
     expect(result.statusCode).toBe(200)
-    expect(result).toHaveProperty('data.todo', replacement)
+    expect(result).toHaveProperty('data.todo')
   })
   
   test('DELETE - DELETE /api/todo/:id', async () => {
-    const id = 48
+    const id = encode(6)
     req = getMockReq({ params: { id } })
     const result = await controller.removeTodo(req, res)
 
