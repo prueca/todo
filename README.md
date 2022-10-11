@@ -23,3 +23,4 @@ $ docker restart todo-api
 * Update: PUT /api/todo/:id
 * Delete: DELETE /api/todo/:id
 * Read All: GET /api/todo
+* Paginate: GET /api/todo/page?page=n&limit=n
