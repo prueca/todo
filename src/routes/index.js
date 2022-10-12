@@ -13,5 +13,6 @@ router.get('/api/todo/:id', controller.getItem.bind(controller))
 router.post('/api/todo', controller.addTodo.bind(controller))
 router.put('/api/todo/:id', controller.updateTodo.bind(controller))
 router.delete('/api/todo/:id', controller.removeTodo.bind(controller))
+router.delete('/api/todo', controller.reset.bind(controller))
 
 export default router

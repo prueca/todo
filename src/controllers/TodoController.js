@@ -181,4 +181,21 @@ export default class TodoController {
       return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
   }
+
+  /**
+   * Reset Todo table
+   * 
+   * @param {Request} _req 
+   * @param {Response} res 
+   * 
+   * @returns void
+   */
+  async reset(_req, res) {
+    try {
+      await this.todo.sync({ force: true })
+      res.data({ success: true })
+    } catch(error) {
+      return res.error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
+    }
+  }
 }
