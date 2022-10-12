@@ -25,7 +25,7 @@ describe('Todo API', () => {
   afterAll(() => sequelize.close())
 
   test('CREATE - POST /api/todo', async () => {
-    const todo = 'test'
+    const todo = 'Todo 11'
     req = getMockReq({ body: { todo } })
     const result = await controller.addTodo(req, res)
 
@@ -36,7 +36,7 @@ describe('Todo API', () => {
   })
   
   test('READ - GET /api/todo/:id', async () => {
-    const id = encode(10)
+    const id = encode(1)
     req = getMockReq({ params: { id } })
     const result = await controller.getItem(req, res)
 
@@ -57,7 +57,7 @@ describe('Todo API', () => {
 
   test('UPDATE - PUT /api/todo/:id', async () => {
     const replacement = {
-      todoId: encode(10),
+      todoId: encode(2),
       todo: 'Successfully updated',
       done: true
     }
@@ -77,7 +77,7 @@ describe('Todo API', () => {
   })
   
   test('DELETE - DELETE /api/todo/:id', async () => {
-    const id = encode(6)
+    const id = encode(3)
     req = getMockReq({ params: { id } })
     const result = await controller.removeTodo(req, res)
 
