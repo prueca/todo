@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  title: Todo API
+  description: REST API for Todo App
+  version: 1.0.0
+  contact:
+    name: Peter John R. Rueca
+    url: https://linkedin.com/in/peterrueca
+servers:
+  - url: http://localhost:{port}
+    variables:
+      port:
+        enum:
+          - '3000'
+          - '8000'
+          - '8080'
+        default: '3000'
+tags:
+  - name: CRUD
+    description: Basic database operations
+paths:
+  /api/todo/{id}:
+    summary: Get todo item
+    get:
+      tags:
+        - CRUD
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: 'Hashed ID of todo item'
+      responses:
+        200:
+          description: Success
+        404:
+          description: API endpoint or todo item not found
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+        default:
+          description: Success
+  /api/todo:
+    summary: Add todo item
+    post:
+      tags:
+        - CRUD
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                todo:
+                  type: string
+      responses:
+        200:
+          description: Success
+        404:
+          description: API endpoint not found
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+        default:
+          description: Success
+        
