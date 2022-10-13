@@ -19,6 +19,56 @@ tags:
   - name: CRUD
     description: Basic database operations
 paths:
+  /api/todo:
+      post:
+        description: Add todo item
+        tags:
+          - CRUD
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  todo:
+                    type: string
+        parameters:
+          - in: header
+            name: X-API-Key
+            required: true
+            schema:
+              type: string
+            description: API key for authentication
+        responses:
+          200:
+            description: Success
+          400:
+            description: Bad request
+          500:
+            description: Internal server error
+          default:
+            description: Success
+      get:
+        description: Get all todo items
+        tags:
+          - CRUD
+        parameters:
+          - in: header
+            name: X-API-Key
+            required: true
+            schema:
+              type: string
+            description: API key for authentication
+        responses:
+          200:
+            description: Success
+          400:
+            description: Bad request
+          500:
+            description: Internal server error
+          default:
+            description: Success
   /api/todo/{id}:
     get:
       description: Get todo item
@@ -30,9 +80,8 @@ paths:
           required: true
           schema:
             type: string
-          description: 'Hashed ID of todo item'
         - in: header
-          name: 'X-API-Key'
+          name: X-API-Key
           required: true
           schema:
             type: string
@@ -41,18 +90,29 @@ paths:
         200:
           description: Success
         404:
-          description: API endpoint or todo item not found
+          description: Data not found
         400:
           description: Bad request
         500:
           description: Internal server error
         default:
           description: Success
-  /api/todo:
-    post:
-      description: Add todo item
+    put:
+      description: Update todo item
       tags:
         - CRUD
+      parameters:
+        - in: header
+          name: X-API-Key
+          required: true
+          schema:
+            type: string
+          description: API key for authentication
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -62,22 +122,39 @@ paths:
               properties:
                 todo:
                   type: string
-      parameters:
-        - in: header
-          name: 'X-API-Key'
-          required: true
-          schema:
-            type: string
-          description: API key for authentication
+                done:
+                  type: boolean
       responses:
         200:
           description: Success
-        404:
-          description: API endpoint not found
         400:
           description: Bad request
         500:
           description: Internal server error
         default:
           description: Success
-        
+    delete:
+      description: Delete todo item
+      tags:
+        - CRUD
+      parameters:
+        - in: header
+          name: X-API-Key
+          required: true
+          schema:
+            type: string
+          description: API key for authentication
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+        default:
+          description: Success
